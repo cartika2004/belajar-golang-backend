@@ -1,6 +1,5 @@
 package models
 
-// Perhatikan: Nama Struct harus Huruf Besar biar bisa dipanggil dari luar
 type User struct {
 	ID       uint   `gorm:"primaryKey"`
 	Username string `gorm:"unique;not null" json:"username"`

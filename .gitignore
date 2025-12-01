@@ -1,12 +1,5 @@
-# Abaikan file hasil build (exe/binary)
 main
 project-todo
-
-# Abaikan file sistem Mac
 .DS_Store
-
-# Abaikan folder IDE
 .vscode/
-
-# Abaikan file rahasia (Nanti kita belajar environment variable)
 .env

@@ -19,7 +19,6 @@ func AuthMiddleware(c *gin.Context) {
 
 	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
 
-	// BACA SECRET DARI .ENV
 	jwtSecret := []byte(os.Getenv("JWT_SECRET"))
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

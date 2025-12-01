@@ -40,13 +40,12 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// Bikin token
+	// token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.ID,
 		"exp":     time.Now().Add(time.Hour * 24).Unix(),
 	})
 
-	// BACA SECRET DARI .ENV DI SINI JUGA
 	jwtSecret := []byte(os.Getenv("JWT_SECRET"))
 	
 	tokenString, _ := token.SignedString(jwtSecret)
