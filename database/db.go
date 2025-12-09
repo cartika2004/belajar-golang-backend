@@ -3,17 +3,18 @@ package database
 import (
 	"fmt"
 	"log"
-	"os"
+
+	"project-todo/config"
+	"project-todo/models"
 
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
-	"project-todo/models"
 )
 
 var DB *gorm.DB
 
 func ConnectDatabase() {
-	dbPassword := os.Getenv("DB_PASSWORD")
+	dbPassword := config.ENV.DBPassword
 	
 	dsn := fmt.Sprintf("sqlserver://sa:%s@localhost:1433?database=todo_app", dbPassword)
 	

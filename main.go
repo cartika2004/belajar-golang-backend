@@ -1,25 +1,22 @@
 package main
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv" // Import library ini
-
-	"project-todo/controllers"
+	
+	"project-todo/config"      // Import folder config
 	"project-todo/database"
+	"project-todo/controllers"
 	"project-todo/middleware"
 )
 
 func main() {
-	// 1. Load file .env dulu!
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// 1. Load Config pakai Viper
+	config.LoadConfig()
 
 	// 2. Baru konek Database
 	database.ConnectDatabase()
+
+	database.ConnectRedis()
 
 	r := gin.Default()
 
@@ -33,7 +30,15 @@ func main() {
 		protected.GET("/todos", controllers.GetTodos)
 		protected.PUT("/todos/:id", controllers.UpdateTodo)
 		protected.DELETE("/todos/:id", controllers.DeleteTodo)
-	}
+
+		adminGroup := protected.Group("/admin")
+		adminGroup.Use(middleware.AdminOnly())
+
+		{
+			adminGroup.GET("/dashboard", func(c *gin.Context) {
+				c.JSON(200, gin.H{"message": "Halo Bos Admin! Ini data rahasia."})
+			})
+	}}
 
 	r.Run(":8080")
 }

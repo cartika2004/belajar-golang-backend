@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"net/http"
-	"os"
+	"project-todo/config"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +19,7 @@ func AuthMiddleware(c *gin.Context) {
 
 	tokenString = strings.TrimPrefix(tokenString, "Bearer ")
 
-	jwtSecret := []byte(os.Getenv("JWT_SECRET"))
+	jwtSecret := []byte(config.ENV.JWTSecret)
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return jwtSecret, nil

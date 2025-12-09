@@ -1,14 +1,16 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
-	"os"
 	"time"
+
+	"project-todo/config"
+	"project-todo/database"
+	"project-todo/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"project-todo/database"
-	"project-todo/models"
 )
 
 func Register(c *gin.Context) {
@@ -43,12 +45,23 @@ func Login(c *gin.Context) {
 	// token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.ID,
+		"role":    user.Role,
 		"exp":     time.Now().Add(time.Hour * 24).Unix(),
 	})
 
-	jwtSecret := []byte(os.Getenv("JWT_SECRET"))
-	
+	jwtSecret := []byte(config.ENV.JWTSecret)
 	tokenString, _ := token.SignedString(jwtSecret)
 
-	c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	redisKey := fmt.Sprintf("user_role:%d", user.ID)
+	err := database.Rdb.Set(database.Ctx, redisKey, user.Role, 24*time.Hour).Err()
+	
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal simpan ke Redis"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"token": tokenString,
+		"role":  user.Role, // Kasih tau di response dia login sebagai apa
+	})
 }
