@@ -15,8 +15,12 @@ var DB *gorm.DB
 
 func ConnectDatabase() {
 	dbPassword := config.ENV.DBPassword
+	dbHost := config.ENV.DBHost
+	if dbHost == "" {
+		dbHost = "localhost"
+	}
 	
-	dsn := fmt.Sprintf("sqlserver://sa:%s@localhost:1433?database=todo_app", dbPassword)
+	dsn := fmt.Sprintf("sqlserver://sa:%s@%s:1433?database=todo_app", dbPassword, dbHost)
 	
 	database, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
 

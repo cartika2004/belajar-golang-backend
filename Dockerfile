@@ -1,5 +1,5 @@
 # 1. Ambil base image Golang (ibarat ambil OS yang udah ada Go-nya)
-FROM golang:1.23-alpine
+FROM golang:alpine
 
 # 2. Bikin folder kerja di dalam container
 WORKDIR /app
