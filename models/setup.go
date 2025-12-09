@@ -11,6 +11,7 @@ type Todo struct {
 	ID          uint   `gorm:"primaryKey"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
+	Deadline 	string `json:"deadline"`
 	IsDone      bool   `gorm:"type:bit" json:"is_done"`
 	UserID      uint   `json:"user_id"`
 }

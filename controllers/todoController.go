@@ -15,6 +15,11 @@ func CreateTodo(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	if input.Deadline == " " {
+	c.JSON(http.StatusBadRequest, gin.H{"error": "Deadline jangan kosong cuy!"})
+	return}
+	
 	userID, _ := c.Get("userID")
 	input.UserID = userID.(uint)
 
